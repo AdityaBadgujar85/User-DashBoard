@@ -89,7 +89,7 @@ function UserDisplay() {
                     </Col>
                     <Col xs={12} sm={12} md={2} className="text-center p-3">
                       <Button variant="primary" className="mb-2" style={{ width: '80%' }} onClick={() => navigate(`/UserEdit/${data.id}`, { state: { user: data } })}>
-                        Edit
+                        ✎
                       </Button>
                       <Button variant="danger" style={{ width: '80%' }}onClick={() => handleDelete(data.id)}> 🗑 </Button>
                     </Col>
