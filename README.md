@@ -1,70 +1,48 @@
-# Getting Started with Create React App
+# Assignment-6 React User Management Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a **React application** that implements **CRUD operations** for managing users. It interacts with the public API **[JSONPlaceholder](https://jsonplaceholder.typicode.com/)** and demonstrates how to use **Axios** for HTTP requests, along with form validation, error handling, and UI updates.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🚀 Live Demo  
+You can check the deployed project here:  
+🔗 [User DashBoard - Netlify Link](https://user-dashboard-project-sub.netlify.app/)
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 📌 Features
+- **Fetch & Display Users:**  
+  - On component mount, fetches user data from the API.  
+  - Displays users in a **table/card layout** with **Name, Email, Username**.  
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Add User:**  
+  - Form with fields for **Name, Email, Username**.  
+  - Sends a **POST request** to API on submission.  
+  - Updates UI with the new user.  
 
-### `npm test`
+- **Update User:**  
+  - Each user has an **Edit button**.  
+  - Clicking Edit populates the form with user details.  
+  - Sends a **PUT/PATCH request** on save.  
+  - Reflects changes in UI.  
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Delete User:**  
+  - Each user has a **Delete button**.  
+  - Shows confirmation before deletion.  
+  - Sends a **DELETE request** and removes user from UI.  
 
-### `npm run build`
+- **Validation & Error Handling:**  
+  - Validates **non-empty fields & valid email format**.  
+  - Displays error messages if API requests fail.  
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Loading State:**  
+  - Shows a loading spinner/indicator while fetching users.  
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🛠️ Tech Stack
+- **React.js** (Functional Components + Hooks)  
+- **Axios** (for HTTP requests)  
+- **CSS / Flexbox / Grid** (for layout and UI styling)  
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+---
