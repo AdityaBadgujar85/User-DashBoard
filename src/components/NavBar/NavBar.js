@@ -6,16 +6,17 @@ import classes from '../css/NavBar.module.css';
 
 function NavBar() {
   return (
+    <Container>
     <Row>
       <Col>
-        <Navbar expand="sm" className={classes.NavbarDesign}>
+        <Navbar expand="sm" className={classes.NavbarDesign} fixed='top'>
           <Container>
             <Navbar.Brand>
               <h1 className={classes.logo}>UserDashBoard</h1>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="my-nav" />
             <Navbar.Collapse id="my-nav">
-              <Nav className="ms-auto">
+              <Nav className='ms-auto'>
                 <NavLink className={classes.link} to="/">Home</NavLink>
                 <NavLink className={classes.link} to="/about">About</NavLink>
                 <NavLink className={classes.link} to="/contact">Contact</NavLink>
@@ -25,6 +26,7 @@ function NavBar() {
         </Navbar>
       </Col>
     </Row>
+    </Container>
   );
 }
 

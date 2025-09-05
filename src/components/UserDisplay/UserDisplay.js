@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Col, Container, Row, Card, Button } from 'react-bootstrap';
 import Axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
+import EditUserIcon from '../Logo/EditUserIcon';
+import DeleteUserIcon from '../Logo/DeleteUserIcon';
 
 const baseURL = 'https://jsonplaceholder.typicode.com/users';
 
@@ -56,7 +58,7 @@ function UserDisplay() {
   };
 
   return (
-    <Container fluid>
+    <Container fluid style={{marginTop:'6rem'}}>
       <Container fluid className="mt-4 text-center">
         <Button style={{ width: '70%' }} onClick={() => navigate('/AddUser')}>
           Add User
@@ -67,16 +69,15 @@ function UserDisplay() {
         <div className="text-center my-5 spinner-border text-primary" role="status">
         </div>
       ) : (
-        <Container fluid className="p-4">
+        <Container fluid className="pt-4">
           <Row className="g-4">
             {userData.map((data) => (
-              <Col key={data.id} xs={12} sm={12} md={6} lg={4}>
+              <Col key={data.id} xs={12} sm={12} md={6} lg={6}>
                 <Card className="h-100 shadow">
                   <Row className="g-0 align-items-center">
                     <Col xs={12} sm={4} md={3} className="text-center p-3">
                       <Card.Img
                         src={require('../img/UserIcon.png')}
-                        style={{ width: '100px', height: '100px', objectFit: 'cover' }}
                         alt="User"
                       />
                     </Col>
@@ -89,9 +90,9 @@ function UserDisplay() {
                     </Col>
                     <Col xs={12} sm={12} md={2} className="text-center p-3">
                       <Button variant="primary" className="mb-2" style={{ width: '80%' }} onClick={() => navigate(`/UserEdit/${data.id}`, { state: { user: data } })}>
-                        ✎
+                        <EditUserIcon/> 
                       </Button>
-                      <Button variant="danger" style={{ width: '80%' }}onClick={() => handleDelete(data.id)}> 🗑 </Button>
+                      <Button variant="danger" style={{ width: '80%' }}onClick={() => handleDelete(data.id)}> <DeleteUserIcon/> </Button>
                     </Col>
                   </Row>
                 </Card>
