@@ -1,72 +1,66 @@
-import React, { useState } from 'react';
-import Axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Container, Form, Button, Row, Col, Card } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from "react";
+import Axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Container, Row, Col } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function AddUser() {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState({
-    name: '',
-    username: '',
-    email: '',
-    phone: '',
-    website: '',
-    street: '',
-    suite: '',
-    city: '',
-    zipcode: '',
-    lat: '',
-    lng: '',
-    companyName: '',
-    catchPhrase: '',
-    bs: ''
-  });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUserData((prevData) => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
+  // State for inputs
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [website, setWebsite] = useState("");
+  const [street, setStreet] = useState("");
+  const [suite, setSuite] = useState("");
+  const [city, setCity] = useState("");
+  const [zipcode, setZipcode] = useState("");
+  const [lat, setLat] = useState("");
+  const [lng, setLng] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [catchPhrase, setCatchPhrase] = useState("");
+  const [bs, setBs] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userData.email);
-    if (!userData.name || !userData.username || !userData.email || !isEmailValid) {
-      alert("Please fill in all required fields correctly.");
+    if (!name || !username || !email) {
+      alert("Please fill in Name, Username, and Email.");
+      return;
+    }
+
+    const isEmailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!isEmailValid) {
+      alert("Please enter a valid email.");
       return;
     }
 
     const finalUser = {
-      name: userData.name,
-      username: userData.username,
-      email: userData.email,
-      phone: userData.phone,
-      website: userData.website,
+      name,
+      username,
+      email,
+      phone,
+      website,
       address: {
-        street: userData.street,
-        suite: userData.suite,
-        city: userData.city,
-        zipcode: userData.zipcode,
-        geo: {
-          lat: userData.lat,
-          lng: userData.lng
-        }
+        street,
+        suite,
+        city,
+        zipcode,
+        geo: { lat, lng },
       },
       company: {
-        name: userData.companyName,
-        catchPhrase: userData.catchPhrase,
-        bs: userData.bs
-      }
+        name: companyName,
+        catchPhrase,
+        bs,
+      },
     };
 
     Axios.post("https://jsonplaceholder.typicode.com/users", finalUser)
       .then((response) => {
         alert("User added successfully!");
-        navigate('/', { state: { newUser: response.data } });
+        navigate("/", { state: { newUser: response.data } });
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -75,75 +69,82 @@ function AddUser() {
   };
 
   return (
-    <Container className="py-5">
-      <Card className="p-4 shadow-sm">
-        <h2 className="mb-4 text-center">Add New User</h2>
-
-        <Form onSubmit={handleSubmit}>
+    <Container className="py-5" style={{marginTop:'3rem'}}>
+      <div className="card shadow-lg p-4 border-0" style={{ borderRadius: "15px" }}>
+        <h2 className="mb-4 text-center text-primary">Add New User</h2>
+        <form onSubmit={handleSubmit}>
           <Row>
-            <Col md={6}>
-              <h5 className="mb-3">Basic Info</h5>
-              {['name', 'username', 'email', 'phone', 'website'].map((field) => (
-                <Form.Group className="mb-3" key={field}>
-                  <Form.Label>{field.charAt(0).toUpperCase() + field.slice(1)}</Form.Label>
-                  <Form.Control
-                    type={field === 'email' ? 'email' : 'text'}
-                    name={field}
-                    value={userData[field]}
-                    onChange={handleChange}
-                    placeholder={`Enter ${field}`}
-                    required={['name', 'username', 'email'].includes(field)}
-                  />
-                </Form.Group>
-              ))}
+            <Col md={4}>
+              <h5 className="text-secondary mb-3">Basic Info</h5>
+              <div className="mb-3">
+                <label className="form-label">Full Name</label>
+                <input type="text" className="form-control" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter full name" required/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Username</label>
+                <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Enter username" required/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Email</label>
+                <input type="email" className="form-control" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter email" required/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Phone</label>
+                <input type="text" className="form-control" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Enter phone number"/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Website</label>
+                <input type="text" className="form-control" value={website} onChange={(e) => setWebsite(e.target.value)} placeholder="Enter website"/>
+              </div>
             </Col>
-
-            <Col md={6}>
-              <h5 className="mb-3">Address</h5>
-              {['street', 'suite', 'city', 'zipcode', 'lat', 'lng'].map((field) => (
-                <Form.Group className="mb-3" key={field}>
-                  <Form.Label>{field.charAt(0).toUpperCase() + field.slice(1)}</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name={field}
-                    value={userData[field]}
-                    onChange={handleChange}
-                    placeholder={`Enter ${field}`}
-                  />
-                </Form.Group>
-              ))}
+            <Col md={4}>
+              <h5 className="text-secondary mb-3">Address</h5>
+              <div className="mb-3">
+                <label className="form-label">Street</label>
+                <input type="text" className="form-control" value={street} onChange={(e) => setStreet(e.target.value)} placeholder="Enter street"/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Suite</label>
+                <input type="text" className="form-control" value={suite} onChange={(e) => setSuite(e.target.value)} placeholder="Enter suite"/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">City</label>
+                <input type="text" className="form-control" value={city} onChange={(e) => setCity(e.target.value)} placeholder="Enter city"/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Zipcode</label>
+                <input type="text" className="form-control" value={zipcode} onChange={(e) => setZipcode(e.target.value)} placeholder="Enter zipcode"/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Latitude</label>
+                <input type="text" className="form-control" value={lat} onChange={(e) => setLat(e.target.value)} placeholder="Enter latitude"/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Longitude</label>
+                <input type="text" className="form-control" value={lng} onChange={(e) => setLng(e.target.value)} placeholder="Enter longitude"/>
+              </div>
+            </Col>
+             <Col>
+              <h5 className="text-secondary mb-3">Company Info</h5>
+              <div className="mb-3">
+                <label className="form-label">Company Name</label>
+                <input type="text" className="form-control" value={companyName} onChange={(e) => setCompanyName(e.target.value)} placeholder="Enter company name"/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Catch Phrase</label>
+                <input type="text" className="form-control" value={catchPhrase} onChange={(e) => setCatchPhrase(e.target.value)} placeholder="Enter catch phrase"/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">BS</label>
+                <input type="text" className="form-control" value={bs} onChange={(e) => setBs(e.target.value)} placeholder="Enter BS"/> 
+              </div>
             </Col>
           </Row>
-
-          <hr />
-
           <Row>
-            <Col>
-              <h5 className="mb-3">Company Info</h5>
-              {['companyName', 'catchPhrase', 'bs'].map((field) => (
-                <Form.Group className="mb-3" key={field}>
-                  <Form.Label>{field.replace(/([A-Z])/g, ' $1')}</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name={field}
-                    value={userData[field]}
-                    onChange={handleChange}
-                    placeholder={`Enter ${field}`}
-                  />
-                </Form.Group>
-              ))}
-            </Col>
-          </Row>
-
-          <Row className="mt-4">
-            <Col>
-              <Button variant="primary" type="submit" className="w-100">
-                Submit
-              </Button>
-            </Col>
-          </Row>
-        </Form>
-      </Card>
+             <button type="submit" className="btn btn-success w-100 fw-bold" style={{ fontSize: "18px", padding: "10px" }}>Submit User </button>
+            </Row>
+        </form>
+      </div>
     </Container>
   );
 }

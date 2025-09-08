@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Form, Button, Container, Col, Row, Card } from 'react-bootstrap';
+import { Container, Col, Row, Card, Button } from 'react-bootstrap';
 import Axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -24,8 +24,6 @@ function EditUserDetails() {
     catchPhrase: '',
     bs: ''
   });
-
-  // Fetch user from API directly (no need for props)
   useEffect(() => {
     Axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
       .then(res => {
@@ -66,6 +64,7 @@ function EditUserDetails() {
     e.preventDefault();
 
     const finalUpdatedUser = {
+      id: Number(id),
       name: updatedUser.name,
       username: updatedUser.username,
       email: updatedUser.email,
@@ -89,9 +88,9 @@ function EditUserDetails() {
     };
 
     Axios.put(`https://jsonplaceholder.typicode.com/users/${id}`, finalUpdatedUser)
-      .then(response => {
+      .then(() => {
         alert("User updated successfully!");
-        navigate('/');
+        navigate('/', { state: { updatedUser: finalUpdatedUser } });
       })
       .catch(err => {
         console.error(err);
@@ -100,65 +99,45 @@ function EditUserDetails() {
   };
 
   return (
-    <Container className="py-5">
+    <Container className="py-5 mt-5">
       <Card className="p-4 shadow-sm">
         <h2 className="mb-4 text-center">Edit User</h2>
-
-        <Form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <Row>
-            <Col md={6}>
+            <Col md={4}>
               <h5 className="mb-3">Basic Info</h5>
               {['name', 'username', 'email', 'phone', 'website'].map(field => (
-                <Form.Group className="mb-3" key={field}>
-                  <Form.Label>{field.charAt(0).toUpperCase() + field.slice(1)}</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name={field}
-                    value={updatedUser[field]}
-                    onChange={handleChange}
-                    placeholder={`Enter ${field}`}
-                  />
-                </Form.Group>
+                <div className="mb-3" key={field}>
+                  <label className="form-label">
+                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                  </label>
+                  <input type="text" className="form-control" name={field} value={updatedUser[field]} onChange={handleChange} placeholder={`Enter ${field}`} />
+                </div>
               ))}
             </Col>
-
-            <Col md={6}>
+            <Col md={4}>
               <h5 className="mb-3">Address</h5>
               {['street', 'suite', 'city', 'zipcode', 'lat', 'lng'].map(field => (
-                <Form.Group className="mb-3" key={field}>
-                  <Form.Label>{field.charAt(0).toUpperCase() + field.slice(1)}</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name={field}
-                    value={updatedUser[field]}
-                    onChange={handleChange}
-                    placeholder={`Enter ${field}`}
-                  />
-                </Form.Group>
+                <div className="mb-3" key={field}>
+                  <label className="form-label">
+                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                  </label>
+                  <input type="text" className="form-control" name={field} value={updatedUser[field]} onChange={handleChange} placeholder={`Enter ${field}`} />
+                </div>
               ))}
             </Col>
-          </Row>
-
-          <hr />
-
-          <Row>
-            <Col>
+            <Col md={4}>
               <h5 className="mb-3">Company</h5>
               {['companyName', 'catchPhrase', 'bs'].map(field => (
-                <Form.Group className="mb-3" key={field}>
-                  <Form.Label>{field.replace(/([A-Z])/g, ' $1')}</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name={field}
-                    value={updatedUser[field]}
-                    onChange={handleChange}
-                    placeholder={`Enter ${field}`}
-                  />
-                </Form.Group>
+                <div className="mb-3" key={field}>
+                  <label className="form-label">
+                    {field.replace(/([A-Z])/g, ' $1')}
+                  </label>
+                  <input type="text" className="form-control" name={field} value={updatedUser[field]} onChange={handleChange} placeholder={`Enter ${field}`} />
+                </div>
               ))}
             </Col>
           </Row>
-
           <Row className="mt-4">
             <Col>
               <Button variant="success" type="submit" className="w-100">
@@ -166,7 +145,7 @@ function EditUserDetails() {
               </Button>
             </Col>
           </Row>
-        </Form>
+        </form>
       </Card>
     </Container>
   );
