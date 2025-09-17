@@ -1,152 +1,135 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Col, Row, Card, Button } from 'react-bootstrap';
-import Axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { Container, Row, Col, Button } from "react-bootstrap";
 
 function EditUserDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [updatedUser, setUpdatedUser] = useState({
-    name: '',
-    username: '',
-    email: '',
-    phone: '',
-    website: '',
-    street: '',
-    suite: '',
-    city: '',
-    zipcode: '',
-    lat: '',
-    lng: '',
-    companyName: '',
-    catchPhrase: '',
-    bs: ''
+  const [user, setUser] = useState({
+    name: "",
+    username: "",
+    email: "",
+    phone: "",
+    website: "",
+    address: {
+      street: "",
+      suite: "",
+      city: "",
+      zipcode: "",
+      geo: { lat: "", lng: "" },
+    },
+    company: { name: "", catchPhrase: "", bs: "" },
   });
+
   useEffect(() => {
-    Axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
-      .then(res => {
-        initializeForm(res.data);
-      })
-      .catch(err => {
-        console.error(err);
-        alert("User not found.");
-        navigate('/');
-      });
-  }, [id, navigate]);
-
-  const initializeForm = (user) => {
-    setUpdatedUser({
-      name: user.name || '',
-      username: user.username || '',
-      email: user.email || '',
-      phone: user.phone || '',
-      website: user.website || '',
-      street: user.address?.street || '',
-      suite: user.address?.suite || '',
-      city: user.address?.city || '',
-      zipcode: user.address?.zipcode || '',
-      lat: user.address?.geo?.lat || '',
-      lng: user.address?.geo?.lng || '',
-      companyName: user.company?.name || '',
-      catchPhrase: user.company?.catchPhrase || '',
-      bs: user.company?.bs || ''
-    });
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUpdatedUser(prev => ({ ...prev, [name]: value }));
-  };
+    if (location.state && location.state.user) {
+      setUser(location.state.user);
+    } else {
+      alert("No user found");
+      navigate("/");
+    }
+  }, [location.state, navigate]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const finalUpdatedUser = {
-      id: Number(id),
-      name: updatedUser.name,
-      username: updatedUser.username,
-      email: updatedUser.email,
-      phone: updatedUser.phone,
-      website: updatedUser.website,
-      address: {
-        street: updatedUser.street,
-        suite: updatedUser.suite,
-        city: updatedUser.city,
-        zipcode: updatedUser.zipcode,
-        geo: {
-          lat: updatedUser.lat,
-          lng: updatedUser.lng
-        }
-      },
-      company: {
-        name: updatedUser.companyName,
-        catchPhrase: updatedUser.catchPhrase,
-        bs: updatedUser.bs
-      }
-    };
-
-    Axios.put(`https://jsonplaceholder.typicode.com/users/${id}`, finalUpdatedUser)
-      .then(() => {
-        alert("User updated successfully!");
-        navigate('/', { state: { updatedUser: finalUpdatedUser } });
-      })
-      .catch(err => {
-        console.error(err);
-        alert("Update failed.");
-      });
+    alert("User updated!!!");
+    navigate("/", { state: { updatedUser: { ...user, id: Number(id) } } });
   };
 
   return (
-    <Container className="py-5 mt-5">
-      <Card className="p-4 shadow-sm">
-        <h2 className="mb-4 text-center">Edit User</h2>
+    <Container className="py-5" style={{ marginTop: "3rem" }}>
+      <div className="card shadow-lg p-4 border-0" style={{ borderRadius: "15px" }}>
+        <h2 className="mb-4 text-center text-danger">Edit User</h2>
         <form onSubmit={handleSubmit}>
           <Row>
             <Col md={4}>
-              <h5 className="mb-3">Basic Info</h5>
-              {['name', 'username', 'email', 'phone', 'website'].map(field => (
-                <div className="mb-3" key={field}>
-                  <label className="form-label">
-                    {field.charAt(0).toUpperCase() + field.slice(1)}
-                  </label>
-                  <input type="text" className="form-control" name={field} value={updatedUser[field]} onChange={handleChange} placeholder={`Enter ${field}`} />
-                </div>
-              ))}
+              <h5 className="text-secondary mb-3">Basic Info</h5>
+              <div className="mb-3">
+                <label className="form-label">Full Name</label>
+                <input type="text" value={user.name} onChange={(e) => setUser({ ...user, name: e.target.value })} className="form-control" placeholder="Enter full name" required/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Username</label>
+                <input type="text" value={user.username}
+                  onChange={(e) => setUser({ ...user, username: e.target.value })} className="form-control" placeholder="Enter username" required/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Email</label>
+                <input type="email" value={user.email} 
+                 onChange={(e) => setUser({ ...user, email: e.target.value })} className="form-control" placeholder="Enter email" required/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Phone</label>
+                <input type="text" value={user.phone} 
+                 onChange={(e) => setUser({ ...user, phone: e.target.value })} className="form-control" placeholder="Enter phone"/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Website</label>
+                <input type="text" value={user.website}
+                  onChange={(e) => setUser({ ...user, website: e.target.value })}className="form-control" placeholder="Enter website"/>
+              </div>
             </Col>
             <Col md={4}>
-              <h5 className="mb-3">Address</h5>
-              {['street', 'suite', 'city', 'zipcode', 'lat', 'lng'].map(field => (
-                <div className="mb-3" key={field}>
-                  <label className="form-label">
-                    {field.charAt(0).toUpperCase() + field.slice(1)}
-                  </label>
-                  <input type="text" className="form-control" name={field} value={updatedUser[field]} onChange={handleChange} placeholder={`Enter ${field}`} />
-                </div>
-              ))}
+              <h5 className="text-secondary mb-3">Address</h5>
+              <div className="mb-3">
+                <label className="form-label">Street</label>
+                <input type="text" value={user.address.street}
+                  onChange={(e) => setUser({...user,address: { ...user.address, street: e.target.value },})}className="form-control" placeholder="Enter street"/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Suite</label>
+                <input type="text" value={user.address.suite}
+                  onChange={(e) => setUser({...user,address: { ...user.address, suite: e.target.value },})}className="form-control" placeholder="Enter suite" />
+              </div>
+              <div className="mb-3">
+                <label className="form-label">City</label>
+                <input type="text" value={user.address.city}
+                  onChange={(e) => setUser({...user,address: { ...user.address, city: e.target.value },})}className="form-control" placeholder="Enter city"/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Zipcode</label>
+                <input type="text" value={user.address.zipcode}
+                  onChange={(e) => setUser({...user,address: { ...user.address, zipcode: e.target.value },})}className="form-control" placeholder="Enter zipcode"/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Latitude</label>
+                <input type="text" value={user.address.geo.lat}
+                  onChange={(e) => setUser({...user,address: {...user.address,geo: { ...user.address.geo, lat: e.target.value },},})}className="form-control" placeholder="Enter latitude"/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Longitude</label>
+                <input type="text" value={user.address.geo.lng}
+                  onChange={(e) => setUser({...user,address: {...user.address,geo: { ...user.address.geo, lng: e.target.value },},})}className="form-control" placeholder="Enter longitude"/>
+              </div>
             </Col>
             <Col md={4}>
-              <h5 className="mb-3">Company</h5>
-              {['companyName', 'catchPhrase', 'bs'].map(field => (
-                <div className="mb-3" key={field}>
-                  <label className="form-label">
-                    {field.replace(/([A-Z])/g, ' $1')}
-                  </label>
-                  <input type="text" className="form-control" name={field} value={updatedUser[field]} onChange={handleChange} placeholder={`Enter ${field}`} />
-                </div>
-              ))}
+              <h5 className="text-secondary mb-3">Company Info</h5>
+              <div className="mb-3">
+                <label className="form-label">Company Name</label>
+                <input type="text" value={user.company.name}
+                  onChange={(e) => setUser({...user,company: { ...user.company, name: e.target.value },})}className="form-control" placeholder="Enter company name"/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Catch Phrase</label>
+                <input type="text" value={user.company.catchPhrase}
+                  onChange={(e) => setUser({...user,company: {...user.company,catchPhrase: e.target.value,},})}className="form-control" placeholder="Enter catch phrase"/>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">BS</label>
+                <input type="text" value={user.company.bs}
+                  onChange={(e) => setUser({...user,company: { ...user.company, bs: e.target.value },})}className="form-control" placeholder="Enter BS"/>
+              </div>
             </Col>
           </Row>
-          <Row className="mt-4">
-            <Col>
-              <Button variant="success" type="submit" className="w-100">
-                Save Changes
-              </Button>
-            </Col>
+          <Row>
+            <Button type="submit" className="btn w-100 fw-bold" style={{ fontSize: "18px", padding: "10px" }} variant="danger">
+              Update User
+            </Button>
           </Row>
         </form>
-      </Card>
+      </div>
     </Container>
   );
 }

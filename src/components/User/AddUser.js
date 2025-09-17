@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import Axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function AddUser() {
   const navigate = useNavigate();
-
-  // State for inputs
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -71,7 +69,7 @@ function AddUser() {
   return (
     <Container className="py-5" style={{marginTop:'3rem'}}>
       <div className="card shadow-lg p-4 border-0" style={{ borderRadius: "15px" }}>
-        <h2 className="mb-4 text-center text-primary">Add New User</h2>
+        <h2 className="mb-4 text-center text-danger">Add New User</h2>
         <form onSubmit={handleSubmit}>
           <Row>
             <Col md={4}>
@@ -141,7 +139,7 @@ function AddUser() {
             </Col>
           </Row>
           <Row>
-             <button type="submit" className="btn btn-success w-100 fw-bold" style={{ fontSize: "18px", padding: "10px" }}>Submit User </button>
+             <Button variant="danger" type="submit" className="btn w-100 fw-bold" style={{ fontSize: "18px", padding: "10px" }}>Submit User </Button>
             </Row>
         </form>
       </div>
