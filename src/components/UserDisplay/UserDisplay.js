@@ -5,8 +5,6 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import EditUserIcon from '../Logo/EditUserIcon'
 import DeleteUserIcon from '../Logo/DeleteUserIcon'
 
-const URL = 'https://jsonplaceholder.typicode.com/users'
-
 function UserDisplay() {
   const nav = useNavigate()
   const loc = useLocation()
@@ -19,24 +17,21 @@ function UserDisplay() {
   useEffect(() => {
     console.log("loading users...")
     setLoad(true)
-    Axios.get(URL).then(res => {
+    Axios.get('https://jsonplaceholder.typicode.com/users').then(res => {
       let all = res.data
       if (newUser) {
         if (!newUser.id) {
           newUser.id = Date.now()
         }
         all = [newUser, ...all]
-        console.log("added user", newUser)
       }
 
       if (updUser) {
         let found = all.some(u => u.id === updUser.id)
         if (found) {
           all = all.map(u => u.id === updUser.id ? updUser : u)
-          console.log("updated user", updUser)
         } else {
           all = [updUser, ...all]
-          console.log("new user inserted", updUser)
         }
       }
       setUsers(all)
@@ -50,11 +45,10 @@ function UserDisplay() {
 
   const del = (id) => {
     if (window.confirm("really want to delete this?")) {
-      Axios.delete(URL + "/" + id).then(() => {
+      Axios.delete('https://jsonplaceholder.typicode.com/users' + "/" + id).then(() => {
         setUsers(prev => prev.filter(x => x.id !== id))
         alert("deleted!!")
       }).catch(err => {
-        console.log("delete error", err)
         alert("not deleted")
       })
     }
